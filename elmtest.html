@@ -12473,11 +12473,11 @@ var $mdgriffith$elm_ui$Internal$Model$Px = function (a) {
 	return {$: 'Px', a: a};
 };
 var $mdgriffith$elm_ui$Element$px = $mdgriffith$elm_ui$Internal$Model$Px;
-var $author$project$View$ViewComponents$withCellStyles = function (list) {
+var $author$project$View$ViewComponents$withCellStyles = function (attr) {
 	return $elm$core$List$concat(
 		_List_fromArray(
 			[
-				list,
+				attr,
 				_List_fromArray(
 				[
 					$mdgriffith$elm_ui$Element$height(
@@ -12555,72 +12555,73 @@ var $author$project$View$FixedRowView$fixedRowViewElements = function (revenueRo
 				$author$project$View$FixedRowView$mapDataToElements(revenueRow.projection)
 			]));
 };
+var $author$project$TableModel$CAGR = {$: 'CAGR'};
+var $author$project$Messages$FieldLostFocus = F5(
+	function (a, b, c, d, e) {
+		return {$: 'FieldLostFocus', a: a, b: b, c: c, d: d, e: e};
+	});
+var $elm$html$Html$Events$onBlur = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'blur',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $mdgriffith$elm_ui$Element$Events$onLoseFocus = A2($elm$core$Basics$composeL, $mdgriffith$elm_ui$Internal$Model$Attr, $elm$html$Html$Events$onBlur);
+var $author$project$View$ViewComponents$activeCellLostFocuse = F5(
+	function (tableId, rowType, rowSection, i, sVal) {
+		return $mdgriffith$elm_ui$Element$Events$onLoseFocus(
+			A5($author$project$Messages$FieldLostFocus, tableId, rowType, rowSection, i, sVal));
+	});
+var $author$project$ViewAttributes$none = $mdgriffith$elm_ui$Element$htmlAttribute(
+	$elm$html$Html$Attributes$class(''));
 var $author$project$Colors$tableHighLightColor = A4($author$project$Colors$rgba, 0, 102, 255, 1);
-var $author$project$View$RowView$mapDataToElements = F3(
-	function (uiPerPeriodRow, index, value) {
-		if (_Utils_cmp(index, uiPerPeriodRow.fixedRows) < 1) {
-			return $author$project$View$ViewComponents$fixedCellStyle(value);
+var $author$project$View$RowView$highLightStyle = F2(
+	function (uiPerPeriodRow, rowType) {
+		var _v0 = uiPerPeriodRow.highLight;
+		if (_v0.$ === 'Just') {
+			var higHLightRowType = _v0.a;
+			return _Utils_eq(higHLightRowType, rowType) ? $mdgriffith$elm_ui$Element$Font$color($author$project$Colors$tableHighLightColor) : $author$project$ViewAttributes$none;
 		} else {
-			var attr = $author$project$View$ViewComponents$withCellStyles(
-				function () {
-					var _v0 = uiPerPeriodRow.highLight;
-					if ((_v0.$ === 'Just') && (_v0.a.$ === 'ProjectedValues')) {
-						var _v1 = _v0.a;
-						return _List_fromArray(
-							[
-								$mdgriffith$elm_ui$Element$Font$color($author$project$Colors$tableHighLightColor)
-							]);
-					} else {
-						return _List_Nil;
-					}
-				}());
-			return A2(
-				$mdgriffith$elm_ui$Element$Input$text,
-				attr,
-				{
-					label: $mdgriffith$elm_ui$Element$Input$labelHidden('editable'),
-					onChange: A4($author$project$Messages$FieldUpdate, uiPerPeriodRow.tableIdentifier, uiPerPeriodRow.rowType, $author$project$TableModel$ProjectedValues, index),
-					placeholder: $elm$core$Maybe$Nothing,
-					text: value
-				});
+			return $author$project$ViewAttributes$none;
 		}
 	});
-var $author$project$TableModel$CAGR = {$: 'CAGR'};
-var $author$project$View$RowView$projectionElements = function (uiPerPeriodRow) {
-	var attr = $author$project$View$ViewComponents$withCellStyles(
-		function () {
-			var _v0 = uiPerPeriodRow.highLight;
-			if ((_v0.$ === 'Just') && (_v0.a.$ === 'CAGR')) {
-				var _v1 = _v0.a;
-				return _List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$Font$color($author$project$Colors$tableHighLightColor)
-					]);
-			} else {
-				return _List_Nil;
-			}
-		}());
-	return A2(
-		$mdgriffith$elm_ui$Element$Input$text,
-		attr,
-		{
-			label: $mdgriffith$elm_ui$Element$Input$labelHidden('editable'),
-			onChange: A4($author$project$Messages$FieldUpdate, uiPerPeriodRow.tableIdentifier, uiPerPeriodRow.rowType, $author$project$TableModel$CAGR, 0),
-			placeholder: $elm$core$Maybe$Nothing,
-			text: uiPerPeriodRow.projection
-		});
-};
+var $author$project$View$RowView$inputCell = F4(
+	function (uiPerPeriodRow, rowSection, index, value) {
+		var attr = $author$project$View$ViewComponents$withCellStyles(
+			_List_fromArray(
+				[
+					A2($author$project$View$RowView$highLightStyle, uiPerPeriodRow, rowSection),
+					A5($author$project$View$ViewComponents$activeCellLostFocuse, uiPerPeriodRow.tableIdentifier, uiPerPeriodRow.rowType, rowSection, index, value)
+				]));
+		return A2(
+			$mdgriffith$elm_ui$Element$Input$text,
+			attr,
+			{
+				label: $mdgriffith$elm_ui$Element$Input$labelHidden('editable'),
+				onChange: A4($author$project$Messages$FieldUpdate, uiPerPeriodRow.tableIdentifier, uiPerPeriodRow.rowType, rowSection, index),
+				placeholder: $elm$core$Maybe$Nothing,
+				text: value
+			});
+	});
+var $author$project$View$RowView$isFixedCell = F3(
+	function (index, fixedRowsIndex, rowSectionType) {
+		return (_Utils_cmp(index, fixedRowsIndex) < 1) && _Utils_eq(rowSectionType, $author$project$TableModel$ProjectedValues);
+	});
+var $author$project$View$RowView$mapDataToElements = F4(
+	function (uiPerPeriodRow, rowSection, index, value) {
+		return A3($author$project$View$RowView$isFixedCell, index, uiPerPeriodRow.fixedRows, rowSection) ? $author$project$View$ViewComponents$fixedCellStyle(value) : A4($author$project$View$RowView$inputCell, uiPerPeriodRow, rowSection, index, value);
+	});
 var $author$project$View$RowView$rowViewElements = function (revenueRow) {
 	var dataRow = A2(
 		$elm$core$List$indexedMap,
-		$author$project$View$RowView$mapDataToElements(revenueRow),
+		A2($author$project$View$RowView$mapDataToElements, revenueRow, $author$project$TableModel$ProjectedValues),
 		revenueRow.row);
 	return A2(
 		$elm$core$List$append,
 		dataRow,
 		_List_fromArray(
 			[
-				$author$project$View$RowView$projectionElements(revenueRow)
+				A4($author$project$View$RowView$mapDataToElements, revenueRow, $author$project$TableModel$CAGR, 0, revenueRow.projection)
 			]));
 };
 var $author$project$Ui$UiTableModel$asRowType = function (highLight) {
@@ -12722,6 +12723,13 @@ var $elm$core$Maybe$andThen = F2(
 			return $elm$core$Maybe$Nothing;
 		}
 	});
+var $elm$core$String$toFloat = _String_toFloat;
+var $author$project$Helper$asFloat = function (f) {
+	return A2(
+		$elm$core$Maybe$withDefault,
+		0.0,
+		$elm$core$String$toFloat(f));
+};
 var $author$project$RowFunctions$fTableUpdateCagrCell = F3(
 	function (val, table, changedRowType) {
 		var rows = A2(
@@ -12736,7 +12744,6 @@ var $author$project$RowFunctions$fTableUpdateCagrCell = F3(
 			table,
 			{row: rows});
 	});
-var $elm$core$String$toFloat = _String_toFloat;
 var $author$project$Helper$isFloat = function (s) {
 	var _v0 = $elm$core$String$toFloat(s);
 	if (_v0.$ === 'Just') {
@@ -12745,15 +12752,17 @@ var $author$project$Helper$isFloat = function (s) {
 		return false;
 	}
 };
+var $author$project$Helper$isAllowedCellCharSequence = function (sVal) {
+	return $author$project$Helper$isFloat(sVal) || ($elm$core$String$isEmpty(sVal) || (sVal === '-'));
+};
 var $author$project$UpdateCommands$cagrUpdate = F4(
 	function (model, rowType, tableId, sVal) {
-		if ($author$project$Helper$isFloat(sVal) || $elm$core$String$isEmpty(sVal)) {
-			var value = $elm$core$String$isEmpty(sVal) ? '0' : sVal;
+		if ($author$project$Helper$isAllowedCellCharSequence(sVal)) {
 			var newTable = A2(
 				$elm$core$List$map,
 				function (table) {
 					if (_Utils_eq(table.name, tableId)) {
-						var cellUpdatedTable = A3($author$project$RowFunctions$fTableUpdateCagrCell, value, table, rowType);
+						var cellUpdatedTable = A3($author$project$RowFunctions$fTableUpdateCagrCell, sVal, table, rowType);
 						return _Utils_update(
 							cellUpdatedTable,
 							{
@@ -12771,6 +12780,9 @@ var $author$project$UpdateCommands$cagrUpdate = F4(
 			return model;
 		}
 	});
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
 var $elm$core$List$drop = F2(
 	function (n, list) {
 		drop:
@@ -12804,13 +12816,12 @@ var $author$project$RowFunctions$fCompoundAnnualGrowthRate = F2(
 		var growth = function () {
 			var _v0 = _Utils_Tuple2(finalValueMaybe, statingValueMaybe);
 			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
-				var finalValue = _v0.a.a;
-				var statingValue = _v0.b.a;
-				return (periods !== 1) ? function (f) {
-					return f / 10000.0;
-				}(
-					$elm$core$Basics$round(
-						((A2($elm$core$Basics$pow, finalValue / statingValue, 1 / (periods - 1)) - 1) * 100) * 10000)) : 0.0;
+				var finalBalance = _v0.a.a;
+				var startingBalance = _v0.b.a;
+				return (periods !== 1) ? ((A2(
+					$elm$core$Basics$pow,
+					$elm$core$Basics$abs(finalBalance / startingBalance),
+					1 / (periods - 1)) - 1) * 100) : 0.0;
 			} else {
 				return 0.0;
 			}
@@ -12878,12 +12889,6 @@ var $author$project$UpdateCommands$calculateGrowthFrom = F3(
 			model,
 			{tables: newTables});
 	});
-var $author$project$Helper$asFloat = function (f) {
-	return A2(
-		$elm$core$Maybe$withDefault,
-		0.0,
-		$elm$core$String$toFloat(f));
-};
 var $author$project$RowFunctions$fStartingValue = F2(
 	function (numbersList, fromIndex) {
 		var wholePeriod = A2($elm$core$List$drop, fromIndex, numbersList);
@@ -13093,7 +13098,7 @@ var $author$project$UpdateCommands$calculateGrowthFromCagr = F3(
 			model,
 			{tables: newTable});
 	});
-var $author$project$RowFunctions$fRevenueRowReplaceValue = F3(
+var $author$project$RowFunctions$fRowReplaceValue = F3(
 	function (row, i, val) {
 		var replaced = A2(
 			$elm$core$List$indexedMap,
@@ -13111,7 +13116,7 @@ var $author$project$RowFunctions$fTableUpdateCell = F4(
 		var rows = A2(
 			$elm$core$List$map,
 			function (row) {
-				return _Utils_eq(row.rowType, changedRowType) ? A3($author$project$RowFunctions$fRevenueRowReplaceValue, row, i, val) : row;
+				return _Utils_eq(row.rowType, changedRowType) ? A3($author$project$RowFunctions$fRowReplaceValue, row, i, val) : row;
 			},
 			table.row);
 		return _Utils_update(
@@ -13120,13 +13125,12 @@ var $author$project$RowFunctions$fTableUpdateCell = F4(
 	});
 var $author$project$UpdateCommands$cellUpdate = F5(
 	function (model, rowType, i, tableId, sVal) {
-		if ((i >= 0) && ($author$project$Helper$isFloat(sVal) || $elm$core$String$isEmpty(sVal))) {
-			var value = $elm$core$String$isEmpty(sVal) ? '0' : sVal;
+		if ((i >= 0) && $author$project$Helper$isAllowedCellCharSequence(sVal)) {
 			var newTable = A2(
 				$elm$core$List$map,
 				function (table) {
 					if (_Utils_eq(table.name, tableId)) {
-						var cellUpdatedTable = A4($author$project$RowFunctions$fTableUpdateCell, i, value, table, rowType);
+						var cellUpdatedTable = A4($author$project$RowFunctions$fTableUpdateCell, i, sVal, table, rowType);
 						return _Utils_update(
 							cellUpdatedTable,
 							{
@@ -13252,6 +13256,18 @@ var $author$project$Update$update = F2(
 						model,
 						{addNewCaseName: '', tables: newTables}),
 					$elm$core$Platform$Cmd$none);
+			case 'FieldLostFocus':
+				var tableId = msg.a;
+				var rowType = msg.b;
+				var rowSection = msg.c;
+				var i = msg.d;
+				var sVal = msg.e;
+				var clearedValue = $elm$core$String$fromFloat(
+					$author$project$Helper$asFloat(sVal));
+				return _Utils_Tuple2(
+					model,
+					$author$project$UpdateCommands$sendMessageWithOutDoingAnything(
+						A5($author$project$Messages$FieldUpdate, tableId, rowType, rowSection, i, clearedValue)));
 			case 'FieldUpdate':
 				var tableId = msg.a;
 				var rowType = msg.b;
