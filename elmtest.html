@@ -12780,9 +12780,6 @@ var $author$project$UpdateCommands$cagrUpdate = F4(
 			return model;
 		}
 	});
-var $elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
 var $elm$core$List$drop = F2(
 	function (n, list) {
 		drop:
@@ -12804,7 +12801,6 @@ var $elm$core$List$drop = F2(
 			}
 		}
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Basics$pow = _Basics_pow;
 var $author$project$RowFunctions$fCompoundAnnualGrowthRate = F2(
 	function (numbersList, fromIndex) {
@@ -12818,18 +12814,12 @@ var $author$project$RowFunctions$fCompoundAnnualGrowthRate = F2(
 			if ((_v0.a.$ === 'Just') && (_v0.b.$ === 'Just')) {
 				var finalBalance = _v0.a.a;
 				var startingBalance = _v0.b.a;
-				return (periods !== 1) ? ((A2(
-					$elm$core$Basics$pow,
-					$elm$core$Basics$abs(finalBalance / startingBalance),
-					1 / (periods - 1)) - 1) * 100) : 0.0;
+				return (periods !== 1) ? ((A2($elm$core$Basics$pow, finalBalance / startingBalance, 1 / (periods - 1)) - 1) * 100) : 0.0;
 			} else {
 				return 0.0;
 			}
 		}();
-		return A2(
-			$elm$core$Debug$log,
-			$elm$core$String$fromFloat(periods),
-			growth);
+		return growth;
 	});
 var $author$project$RowFunctions$fReplaceRow = F2(
 	function (list, newRow) {
