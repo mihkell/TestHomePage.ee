@@ -13421,14 +13421,14 @@ var $author$project$ViewComponents$withCellStyles = function (attr) {
 	return $elm$core$List$concat(
 		_List_fromArray(
 			[
-				attr,
 				_List_fromArray(
 				[
 					$mdgriffith$elm_ui$Element$height(
 					$mdgriffith$elm_ui$Element$px(50)),
 					$mdgriffith$elm_ui$Element$width(
 					$mdgriffith$elm_ui$Element$px(100))
-				])
+				]),
+				attr
 			]));
 };
 var $author$project$ViewComponents$fixedCellStyle = function (value) {
@@ -13526,6 +13526,7 @@ var $author$project$RowView$editableRow = function (uiPerPeriodRow) {
 			$author$project$ViewComponents$withCellStyles(
 				_List_fromArray(
 					[
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 						$author$project$ViewComponents$activeCellLostFocuse(uiPerPeriodRow.tableIdentifier),
 						$author$project$ViewAttributes$id(
 						$elm$core$String$concat(
